@@ -15,6 +15,7 @@ WSL2 + Ubuntu + Docker + localstack で動かす。
 1. キューを作成
     ```
     aws --region us-east-1 --endpoint-url http://localhost:4566 sqs create-queue --queue-name 'foo-queue'
+    aws --region us-east-1 --endpoint-url http://localhost:4566 sqs create-queue --queue-name 'foo-queue.fifo' --attributes "FifoQueue=true"
     ```
 
 ## アプリ起動
@@ -23,6 +24,7 @@ WSL2 + Ubuntu + Docker + localstack で動かす。
 1. キューに値を入れる
     ```
     aws --region us-east-1 --endpoint-url http://localhost:4566 sqs send-message --queue-url 'http://localhost:4566/000000000000/foo-queue' --message-body 'hogehoge'
+    aws --region us-east-1 --endpoint-url http://localhost:4566 sqs send-message --queue-url 'http://localhost:4566/000000000000/foo-queue.fifo' --message-group-id 'test1' --message-body 'hogehoge'
     ```
 1. リスナーが動いて、SQSからデータを受信する。
 1. `restTemplate`でURLアクセス

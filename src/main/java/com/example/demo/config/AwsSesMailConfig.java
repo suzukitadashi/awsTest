@@ -21,8 +21,10 @@ import com.example.demo.service.TestMailSenderService;
 
 import io.awspring.cloud.ses.SimpleEmailServiceJavaMailSender;
 import io.awspring.cloud.ses.SimpleEmailServiceMailSender;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@Slf4j
 public class AwsSesMailConfig {
 
 	@Value("${cloud.aws.region.static}")
@@ -63,7 +65,7 @@ public class AwsSesMailConfig {
 	
 	public IMailSenderService mailSenderService(MailSender mailSender, JavaMailSender javaMailSender) {
 	
-		System.out.println("activeÉÇÅ[ÉhÇÕ" + activeMode + "Ç≈Ç∑");
+		log.info("Ëµ∑Âãï„É¢„Éº„Éâ:{}", activeMode);
 		
 		if(Objects.equals(activeMode, "dev")) {
 			return new TestMailSenderService(mailSender, javaMailSender);
