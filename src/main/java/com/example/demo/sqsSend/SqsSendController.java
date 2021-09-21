@@ -3,12 +3,12 @@ package com.example.demo.sqsSend;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.LocalDateTime;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.Queue;
 import com.example.demo.SendObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,15 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SqsSendController {
 
-	private static final String TEST_QUEUE = "foo-queue.fifo";
-	
-	private static final String MESSAGE_GROUP_ID = "SBS_MESSAGE_GROUP";
-	
 	private QueueMessagingTemplate messagingTemplate;
 
 	private ObjectMapper mapper;
 	
-	public SqsSendController(QueueMessagingTemplate messagingTemplate) {
+	public SqsSendController(QueueMessagingTemplate messagingTemplate
+			) {
 		this.messagingTemplate = messagingTemplate;
 		this.mapper = new ObjectMapper();
 	}
@@ -50,9 +47,9 @@ public class SqsSendController {
 		//setHeaderでmessageGroupIdを設定しても、MessageGroupIdがパラメータに無いと言われる
 		//Mapでheader要素を設定して渡すと正常に動く
 		Map<String, Object> headers = new HashMap<>();
-	    headers.put("message-group-id", MESSAGE_GROUP_ID);
-		
-		messagingTemplate.convertAndSend(TEST_QUEUE, msg, headers);
+	    headers.put("message-group-id", Queue.MESSAGE_GROUP_ID);
+	    
+		messagingTemplate.convertAndSend(Queue.TEST, msg, headers);
 		
 		return "success";
 	}

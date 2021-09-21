@@ -16,6 +16,9 @@ public class Api2Controller {
 	
 	@GetMapping("/api2")
 	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+
+		
+		throw new IllegalStateException("aaa");
+//		return new Greeting(counter.incrementAndGet(), String.format(template, name));
 	}
 }

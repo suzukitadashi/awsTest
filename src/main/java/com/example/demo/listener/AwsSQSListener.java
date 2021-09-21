@@ -4,9 +4,11 @@ import java.util.Map;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.Greeting;
+import com.example.demo.Queue;
 import com.example.demo.SendObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,7 +44,8 @@ public class AwsSQSListener {
         
     }
 
-	@SqsListener("foo-queue.fifo")
+//	@SqsListener("foo-queue.fifo")
+	@SqsListener(Queue.TEST)
     public void loadMessageFromSQS2(String message) throws JsonMappingException, JsonProcessingException  {
         log.info("fifo message from SQS Queue {}",message);
         
@@ -70,9 +73,14 @@ public class AwsSQSListener {
         	e.printStackTrace();
         }
         
-		
-		Greeting response2 = restTemplate.getForObject("http://localhost:8080/api2", Greeting.class);
-		log.info(response2.toString());
+		try {
+			Greeting response2 = restTemplate.getForObject("http://localhost:8080/api2", Greeting.class);
+			log.info(response2.toString());
+		} catch (RestClientException e) {
+			log.error("RestClientExceptionが発生", e);
+		} catch (Exception e) {
+			log.error("想定外のエラーが発生", e);
+		}
 
         
     }
